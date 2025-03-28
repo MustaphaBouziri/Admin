@@ -8,7 +8,7 @@ export default function Register() {
     lastname: "",
     tel: "",
     email: "",
-    //pdf: "",
+    pdf: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

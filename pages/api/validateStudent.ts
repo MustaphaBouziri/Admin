@@ -1,6 +1,6 @@
 import connectMongo from "@/lib/mongoose";
-import Student from "@/models/student"; // Import the Student model
-import Dataa from "@/models/dataa"; // Import the Dataa model
+import Student from "@/models/student";
+import Dataa from "@/models/dataa";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

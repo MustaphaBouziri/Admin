@@ -11,7 +11,7 @@ export default async function handler(
   switch (req.method) {
     case "POST":
       try {
-        const { name, lastname, tel, email } = req.body;
+        const { name, lastname, tel, email, pdf } = req.body;
 
         if (!name || !lastname || !tel || !email) {
           return res
@@ -24,6 +24,7 @@ export default async function handler(
           lastname,
           tel,
           email,
+          pdf,
         });
         return res.status(201).json({ success: true, data: newstudent });
       } catch {

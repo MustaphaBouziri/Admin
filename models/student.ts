@@ -6,6 +6,7 @@ export interface IStudent extends Document {
   tel: string;
   email: string;
   status: string;
+  pdf: string;
 }
 
 const StudentSchema: Schema<IStudent> = new mongoose.Schema({
@@ -13,6 +14,7 @@ const StudentSchema: Schema<IStudent> = new mongoose.Schema({
   lastname: { type: String, required: true },
   tel: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  pdf: { type: String },
   status: {
     type: String,
     enum: ["pending", "approved", "rejected"],

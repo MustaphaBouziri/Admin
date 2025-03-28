@@ -21,11 +21,11 @@ export default async function handler(
             .json({ success: false, error: "Email and status are required." });
         }
 
-        // Find the student by email and update their status
+        // find the student by email and update their status
         const updatedStudent = await Student.findOneAndUpdate(
           { email },
           { status },
-          { new: true } // Return the updated document
+          { new: true }
         );
 
         if (!updatedStudent) {

@@ -13,7 +13,7 @@ export default function Form() {
     birth: "",
     birth_place: "",
     category: category,
-    pdf: "", // To store the file (base64 string or file path)
+    pdf: "", 
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Form() {
 
   const addForm = async () => {
     try {
-      const response = await fetch("api/validateStudent", {  // This is where the validation and creation happens now.
+      const response = await fetch("api/validateStudent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

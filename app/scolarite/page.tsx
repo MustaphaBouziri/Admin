@@ -22,7 +22,7 @@ export default function Admin() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  // Fetch all students initially
+  // fetch all students
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +30,7 @@ export default function Admin() {
         const result = await response.json();
         if (result.success) {
           setStudentData(result.data);
-          setFilteredStudents(result.data); // Initially show all students
+          setFilteredStudents(result.data);
         }
       } catch (error) {
         console.error("Error fetching data", error);
@@ -39,12 +39,12 @@ export default function Admin() {
     fetchData();
   }, []);
 
-  // Search function
+  // search function
   const search = async (value: string) => {
     setSearchQuery(value);
 
     if (value.trim() === "") {
-      setFilteredStudents(studentData); // Reset to full list if empty
+      setFilteredStudents(studentData);
       return;
     }
 
@@ -53,14 +53,14 @@ export default function Admin() {
       const result = await response.json();
 
       if (result.success) {
-        setFilteredStudents(result.data); // Update only filteredStudents
+        setFilteredStudents(result.data); // update only filteredStudents
       }
     } catch (error) {
       console.error("Error searching:", error);
     }
   };
 
-  // Delete student function
+  // delete student
   const deletedata = async (id: string, email: string) => {
     try {
       const response = await fetch(`/api/dattas?id=${id}`, { method: "DELETE" });
@@ -88,10 +88,10 @@ export default function Admin() {
     }
   };
 
-  // Get unique categories for the dropdown
+  // get unique categories for the dropdown
   const categories = Array.from(new Set(studentData.map((s) => s.category)));
 
-  // Filter students by category
+  // filter students by category
   const displayedStudents =
     selectedCategory === "All"
       ? filteredStudents
@@ -99,7 +99,7 @@ export default function Admin() {
 
   return (
     <div className="p-6 mt-10">
-      {/* Filter Dropdown */}
+      {/* filter dropdown */}
       <div className="mb-4">
         <label className="mr-2 font-bold text-gray-800">Filter by Category:</label>
         <select
@@ -116,7 +116,7 @@ export default function Admin() {
         </select>
       </div>
 
-      {/* Search Bar */}
+      {/* search bar */}
       <input
         type="text"
         placeholder="Search by name, lastname, or email"
@@ -125,10 +125,10 @@ export default function Admin() {
         onChange={(e) => search(e.target.value)}
       />
 
-      {/* Student Cards */}
+      {/* student cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {displayedStudents.map((s) => (
-          <div
+          <div onClick={()=>router.push(`../scolarite/display_info?id=${s._id}`)}
             key={s._id}
             className="bg-white shadow-xl rounded-2xl p-6 border border-gray-300 hover:shadow-2xl transition transform hover:-translate-y-1 relative"
           >
@@ -142,20 +142,12 @@ export default function Admin() {
             <h2 className="text-2xl font-bold text-gray-900">
               {s.name} {s.lastname}
             </h2>
-            <p className="text-gray-700 mt-2">
-              Email: <span className="font-medium text-gray-800">{s.email}</span>
-            </p>
-            <p className="text-gray-700">
-              Birth Year: <span className="font-medium text-gray-800">{s.birth}</span>
-            </p>
-            <p className="text-gray-700">
-              Birth Place: <span className="font-medium text-gray-800">{s.birth_place}</span>
-            </p>
+            
             <span className="mt-4 inline-block bg-blue-600 text-white text-sm px-4 py-2 rounded-full shadow-md">
               {s.category}
             </span>
 
-            {/* Open PDF link */}
+            {/* open pdf link */}
             <button
               onClick={() => {
                 if (s.pdf) {
