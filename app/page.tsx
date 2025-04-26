@@ -3,6 +3,17 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+     <div className="flex gap-4">
+        <Link href={"/register"}>
+        <button className="bg-green-400 rounded-lg w-20 h-8 text-white mb-2 ">Register</button></Link>
+
+        <Link href={"/modir"}>
+        <button className="bg-blue-400 rounded-lg w-20 h-8 text-white mb-2 ">Director</button></Link>
+
+        <Link href={"/scolarite"}>
+        <button className="bg-red-400 rounded-lg w-20 h-8 text-white mb-2 ">Scolarite</button></Link>
+      </div>
+      
       <div className="w-full max-w-3xl h-64 bg-red-500 flex items-center justify-center text-white text-xl font-bold mb-6">
         Image will be here
       </div>

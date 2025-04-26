@@ -58,7 +58,7 @@ export default function Register() {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-md space-y-4">
-      <h1 className="text-xl font-bold text-gray-800">Upload your files</h1>
+      <h1 className="text-xl font-bold text-gray-800">Register</h1>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700">Name</label>
