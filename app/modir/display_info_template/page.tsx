@@ -45,7 +45,7 @@ export default function Display_info_template() {
 
   return (
     <div>
-      {studentInfo?.category==="Atestation" &&(
+      {studentInfo?.category==="Attestation" &&(
          <Attestation
          name={studentInfo.name}
          lastname={studentInfo.lastname}

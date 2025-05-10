@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import { useRouter } from "next/navigation";
-
+import { redirect, useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
 interface StudentData {
   _id: string;
   name: string;
@@ -20,7 +20,23 @@ export default function Admin() {
   const [filteredStudents, setFilteredStudents] = useState<StudentData[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
+  
   const router = useRouter();
+  useEffect(() => {
+      const checkSession = async () => {
+        const session = await getSession();
+        if (!session) {
+          router.push("/login"); 
+        } else if (session.user?.role !== "admin") {
+          redirect("/");
+        } else {
+          fetchData();
+        }
+        setLoading(false);
+      };
+  
+      checkSession();
+    }, []);
 
   // fetch all students
   useEffect(() => {
