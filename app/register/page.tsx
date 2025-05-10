@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { register } from "@/action/user";
+//import { useState } from "react";
 
 export default function Register() {
-  const [studentData, setStudentData] = useState({
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+    const message = await register(formData);
+
+    if (message) {
+      alert(message);
+    }
+  };
+  /*const [studentData, setStudentData] = useState({
     name: "",
     lastname: "",
     tel: "",
@@ -14,7 +26,7 @@ export default function Register() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setStudentData((prev) => ({ ...prev, [name]: value }));
-  };
+  };*/
 
   /*const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -36,7 +48,7 @@ export default function Register() {
   };*/
   
 
-  const addStudent = async () => {
+  /*const addStudent = async () => {
     try {
       const response = await fetch("api/students", {
         method: "POST",
@@ -54,11 +66,12 @@ export default function Register() {
     } catch (error) {
       console.error("Error fetching data", error);
     }
-  };
+  };*/
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-md space-y-4">
       <h1 className="text-xl font-bold text-gray-800">Register</h1>
+      <form action={register} onSubmit={handleSubmit}>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -66,8 +79,8 @@ export default function Register() {
           className="w-full p-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
           type="text"
           name="name"
-          value={studentData.name}
-          onChange={handleInputChange}
+          //value={studentData.name}
+          //onChange={handleInputChange}
         />
       </div>
 
@@ -77,8 +90,8 @@ export default function Register() {
           className="w-full p-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
           type="text"
           name="lastname"
-          value={studentData.lastname}
-          onChange={handleInputChange}
+          //value={studentData.lastname}
+          //onChange={handleInputChange}
         />
       </div>
 
@@ -88,8 +101,8 @@ export default function Register() {
           className="w-full p-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
           type="tel"
           name="tel"
-          value={studentData.tel}
-          onChange={handleInputChange}
+          //value={studentData.tel}
+          //onChange={handleInputChange}
         />
       </div>
 
@@ -99,8 +112,8 @@ export default function Register() {
           className="w-full p-2 border border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
           type="email"
           name="email"
-          value={studentData.email}
-          onChange={handleInputChange}
+          //value={studentData.email}
+          //onChange={handleInputChange}
         />
       </div>
 
@@ -108,10 +121,11 @@ export default function Register() {
 
       <button
         className="w-full p-3 text-white bg-red-500 rounded-lg hover:bg-red-600 transition-all"
-        onClick={addStudent}
+        //onClick={addStudent}
       >
         Submit
       </button>
+      </form>
     </div>
   );
 }

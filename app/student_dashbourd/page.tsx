@@ -1,5 +1,6 @@
 "use client";
 
+import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import "font-awesome/css/font-awesome.min.css";
 
@@ -9,23 +10,35 @@ interface StudentData {
 
 export default function StudentDashbourd() {
   const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      const session = await getSession();
+      if (!session || !session.user?.email) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch("/api/test");
+        const response = await fetch(`/api/test?email=${session.user.email}`);
         const result = await response.json();
         if (result.success && result.data.length > 0) {
-             //the reason why i need to do [0] is because without it it will return an array of object [{}] and if i wish to do studentdata.pdf with out it it wont work bcz its acpecting an object not an array of object 
-          //rresult.data i usaly works when u do map in my case om 
           setStudentData(result.data[0]);
         }
       } catch (error) {
         console.error("Error fetching data", error);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchData();
   }, []);
+
+  if (loading) {
+    return <div className="text-center text-lg text-gray-600">Loading student details...</div>;
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -43,7 +56,7 @@ export default function StudentDashbourd() {
           </div>
         </div>
       ) : (
-        <div className="text-center text-lg text-gray-600">Loading student details...</div>
+        <div className="text-center text-lg text-gray-600">No data found.</div>
       )}
     </div>
   );
