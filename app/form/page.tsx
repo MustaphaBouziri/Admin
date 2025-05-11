@@ -1,5 +1,7 @@
 "use client";
+
 import { useState, useEffect } from "react";
+import { getSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
 export default function Form() {
@@ -10,14 +12,29 @@ export default function Form() {
     name: "",
     lastname: "",
     email: "",
+    tel: "",
     birth: "",
     birth_place: "",
     category: category,
-    pdf: "", 
+    pdf: "",
   });
 
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, category }));
+    const fillUserData = async () => {
+      const session = await getSession();
+      if (session && session.user) {
+        setFormData((prev) => ({
+          ...prev,
+          name: session.user.name|| "",
+          lastname: session.user.lastname || "",
+          email: session.user.email || "",
+          tel: (session.user as any).tel || "", // fallback if tel is in user object
+          category,
+        }));
+      }
+    };
+
+    fillUserData();
   }, [category]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +42,6 @@ export default function Form() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle PDF file change
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -35,7 +51,7 @@ export default function Form() {
       reader.onload = () => {
         const base64String = reader.result?.toString();
         if (base64String) {
-          setFormData({ ...formData, pdf: base64String });
+          setFormData((prev) => ({ ...prev, pdf: base64String }));
         }
       };
     }
@@ -84,7 +100,7 @@ export default function Form() {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-lg"
           />
         </div>
 
@@ -95,7 +111,7 @@ export default function Form() {
             name="lastname"
             value={formData.lastname}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-lg"
           />
         </div>
 
@@ -106,7 +122,18 @@ export default function Form() {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700">Phone</label>
+          <input
+            type="text"
+            name="tel"
+            value={formData.tel}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded-lg"
           />
         </div>
 
@@ -117,7 +144,7 @@ export default function Form() {
             name="birth"
             value={formData.birth}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-lg"
           />
         </div>
 
@@ -128,7 +155,7 @@ export default function Form() {
             name="birth_place"
             value={formData.birth_place}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-lg"
           />
         </div>
 
@@ -139,7 +166,7 @@ export default function Form() {
             name="pdf"
             accept="application/pdf"
             onChange={handleFileChange}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-lg"
           />
         </div>
 

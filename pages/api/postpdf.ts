@@ -1,5 +1,5 @@
 import connectMongo from "@/lib/mongoose";
-import Student from "@/models/student";
+import { Student } from "@/models/student";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

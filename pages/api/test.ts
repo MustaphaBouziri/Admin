@@ -1,5 +1,7 @@
+// /pages/api/test.ts
+
 import connectMongo from "@/lib/mongoose";
-import Student from "@/models/student";
+import { Student } from "../../models/student";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -11,10 +13,14 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        const fetchData = await Student.find(
-          { email: "z@gmail.com" },
-          { pdf: 1 }
-        );
+        const { email } = req.query;
+        if (typeof email !== "string") {
+          return res
+            .status(400)
+            .json({ success: false, error: "Email is required" });
+        }
+
+        const fetchData = await Student.find({ email }, { pdf: 1, status: 1 });
         return res.status(200).json({ success: true, data: fetchData });
       } catch {
         return res

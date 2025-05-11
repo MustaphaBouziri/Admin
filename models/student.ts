@@ -7,6 +7,7 @@ export interface IStudent extends Document {
   email: string;
   status: string;
   pdf: string;
+  role: string;
 }
 
 const StudentSchema: Schema<IStudent> = new mongoose.Schema({
@@ -20,9 +21,8 @@ const StudentSchema: Schema<IStudent> = new mongoose.Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
+  role: { type: String, default: "studient" },
 });
 
-const Student: Model<IStudent> =
+export const Student: Model<IStudent> =
   mongoose.models.Student || mongoose.model<IStudent>("Student", StudentSchema);
-
-export default Student;
