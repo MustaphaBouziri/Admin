@@ -63,7 +63,8 @@ export default function Home() {
           height={40}
           className="object-contain"
         />
-        <span>Image Placeholder</span>
+        <span>Image Placeholder <br /> hello
+         </span>
       </div>
 
       {/* Category Buttons Grid */}
