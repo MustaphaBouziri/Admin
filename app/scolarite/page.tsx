@@ -16,31 +16,46 @@ interface StudentData {
   pdf: string;
 }
 
-export default function Admin() {
+interface UserData {
+  name: string;
+  email: string;
+}
+
+export default function ScolariteDashboard() {
   const [studentData, setStudentData] = useState<StudentData[]>([]);
   const [filteredStudents, setFilteredStudents] = useState<StudentData[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    const checkSession = async () => {
+    const fetchData = async () => {
       const session = await getSession();
-      if (!session) {
-        router.push("/login");
-      } else if (session.user?.role !== "admin") {
+      if (!session || !session.user?.email) {
+        setLoading(false);
+        return;
+      }
+
+      setUserData({
+        name: session.user.name || '',
+        email: session.user.email
+      });
+
+      if (session.user?.role !== "admin") {
         redirect("/");
       } else {
-        fetchData();
+        fetchStudentData();
       }
       setLoading(false);
     };
-    checkSession();
+
+    fetchData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchStudentData = async () => {
     try {
       const response = await fetch("/api/dattas");
       const result = await response.json();
@@ -109,9 +124,21 @@ export default function Admin() {
       ? filteredStudents
       : filteredStudents.filter((s) => s.category === selectedCategory);
 
-  if (loading) return <p className="text-center mt-10 text-lg">Loading...</p>;
+  if (loading) return <div className="text-center text-lg text-gray-600">Loading scolarite details...</div>;
 
   return (
+    <div className="min-h-screen bg-gradient-to-r from-[#e2e2e2] to-[#c4defd] p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Welcome Message */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Welcome <span className="underline italic">{userData?.name || 'Scolarite'}</span> to your Scolarite Dashboard
+          </h1>
+        </div>
+
+        {/* Scolarite Dashboard Content */}
+        <div className="border border-[#F0F0F0] rounded-lg bg-white p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">Scolarite Controls</h2>
     <div className="p-6 mt-10">
       <div className="mb-4">
         <label className="mr-2 font-bold text-gray-800">Filter by Category:</label>
@@ -177,6 +204,9 @@ export default function Admin() {
             </button>
           </div>
         ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
