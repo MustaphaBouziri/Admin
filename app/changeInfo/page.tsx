@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 
 export default function ChangeInfo() {
   const [userData, setUserData] = useState({
@@ -45,6 +45,7 @@ export default function ChangeInfo() {
       if (result.success) {
         alert("Information updated successfully");
         setEditing(false);
+        signOut({ callbackUrl: "/" });
       } else {
         alert(result.error || "Update failed");
       }
